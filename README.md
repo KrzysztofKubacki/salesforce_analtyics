@@ -1,87 +1,94 @@
 # Salespeople Performance Dashboard (Streamlit, Hellwig, TOPSIS, z-score)
 
-##  Cel biznesowy
-Firma chce porównywać handlowców w wielu KPI jednocześnie i szybko wskazać
-- kto dowozi wynik (oraz w czym),
-- gdzie są najsłabsze punkty (osobaregionmetryka),
-- jakie działania naprawcze wdrożyć.
+---
 
-##  Rozwiązanie
-Interaktywny dashboard w Streamlit z metodami wielokryterialnej oceny
-- z-score – normalizacja KPI,
-- Wskaźnik Hellwiga – odległość od „wzorca idealnego”,
-- TOPSIS – preferencja bliżej wzorca, dalej od anty-wzorca.
+## Business Objective
 
-Dodatkowo generowane są rekomendacje per handlowiec (na podstawie silnychsłabych KPI).
+The company needs to compare salespeople across multiple KPIs simultaneously and quickly identify:  
+- who delivers results (and in which areas),  
+- where the weakest points are (person × region × metric),  
+- which corrective actions should be taken.  
 
 ---
 
-##  Najważniejsze widoki i ich wartość
+## Solution
 
-1) Regional heatmap (średni z-score per region & KPI)  
-    Szybko pokazuje w których metrykach region jest mocnysłaby.  
-   „Zielone” – powyżej średniej, „czerwone” – poniżej.  
-   Plik `screenshots02_regional_heatmap.png`
+An interactive dashboard built in **Streamlit** with multi-criteria evaluation methods:  
+- **z-score** – KPI normalization  
+- **Hellwig’s method** – distance from the “ideal benchmark”  
+- **TOPSIS** – preference closer to the ideal, farther from the anti-ideal  
 
-2) Heatmap all salespeople vs all metrics  
-    Macierz kompetencji – który handlowiec w których KPI odstaje (na plusminus).  
-   Idealna do targetowania szkoleń czy celowanych działań.  
-   Plik `screenshots05_salespeople_heatmap.png`
-
-3) Radar chart (profil jednego handlowca)  
-    Jedno spojrzenie na profil KPI wybranej osoby. Widać natychmiast, co ciągnie wynik w górę, a co w dół.  
-   Plik `screenshots06_radar_chart.png`
-
-4) Rankingi (Hellwig  TOPSIS)  
-    Transparentny, „sprawiedliwy” ranking wielokryterialny – nie faworyzuje pojedynczego KPI.  
-   Plik `screenshots03_SR_ranking.png`
-
-5) Rekomendacje per handlowiec  
-    Automatyczne wskazówki „co robić dalej” mocnesłabe strony + konkretne akcje.  
-   Plik `screenshots07_recommendations.png`
-
-(Dla kompletności w repo są też `01_raw_data.png`, `04_scatter.png`.)
+Additionally, recommendations are generated per salesperson (based on strong and weak KPIs).  
 
 ---
 
-## Struktura repo
+## Key Views & Business Value
+
+1. **Regional heatmap (average z-score per region & KPI)**  
+   Highlights which KPIs a region is strong or weak in.  
+   “Green” = above average, “red” = below.  
+   File: `screenshots/02_regional_heatmap.png`  
+
+2. **Heatmap – all salespeople vs all metrics**  
+   Competence matrix showing which salesperson excels or underperforms in each KPI.  
+   Useful for targeting training and corrective actions.  
+   File: `screenshots/05_salespeople_heatmap.png`  
+
+3. **Radar chart (individual profile)**  
+   One view of a salesperson’s KPI profile – instantly shows strengths and weaknesses.  
+   File: `screenshots/06_radar_chart.png`  
+
+4. **Rankings (Hellwig + TOPSIS)**  
+   Transparent, “fair” multi-criteria ranking – avoids bias toward a single KPI.  
+   File: `screenshots/03_SR_ranking.png`  
+
+5. **Recommendations per salesperson**  
+   Automatic suggestions on “what to do next” – strengths, weaknesses, and concrete actions.  
+   File: `screenshots/07_recommendations.png`  
+
+(For completeness, the repo also contains `01_raw_data.png` and `04_scatter.png`.)  
+
+---
+
+## Repository Structure
 ```bash
 streamlit-salespeople
 ├── app.py
 ├── requirements.txt
 ├── README.md
 ├── sample_data
-│ └── salespeople_performance_sample.xlsx
+│   └── salespeople_performance_sample.xlsx
 └── screenshots
-├── 01_raw_data.png
-├── 02_regional_heatmap.png
-├── 03_SR_ranking.png
-├── 04_scatter.png
-├── 05_salespeople_heatmap.png
-├── 06_radar_chart.png
-└── 07_recommendations.png
+    ├── 01_raw_data.png
+    ├── 02_regional_heatmap.png
+    ├── 03_SR_ranking.png
+    ├── 04_scatter.png
+    ├── 05_salespeople_heatmap.png
+    ├── 06_radar_chart.png
+    └── 07_recommendations.png
+
 ```
 
 ---
 
-## Dane – oczekiwane kolumny
-Minimalny zestaw (kolumny tekstowe dowolne, reszta numeryczna)
-- `SalespersonID` (np. S001)  
-- `Region`, `Month`  
-- `VisitsPlanned`, `VisitsMade`, `NewClients`, `Revenue`, `SalesTarget`, `Orders made`  
-- `ResponseTimeDays`, `CustomerSatisfaction`, `ComplaintCount`, `Return value`
+## Data – Expected Columns
+Minimum dataset (text columns flexible, others numeric):
+- SalespersonID (e.g., S001)
+- Region, Month
+- VisitsPlanned, VisitsMade, NewClients, Revenue, SalesTarget, OrdersMade
+- ResponseTimeDays, CustomerSatisfaction, ComplaintCount, ReturnValue
+Additional KPIs are calculated automatically:
+- Visit Achievement %, Revenue Achievement, Complaint Rate,
+- Refund Rate, Conversion Rate, Average Order Value.
 
-Aplikacja wylicza dodatkowe KPI  
-`Visit Achievement %`, `Revenue Achievement`, `Complaint Rate`, `Refund Rate`, `Conversion Rate`, `Average Order Value`.
-
-Format wejścia CSV lub XLSX (możesz wskazać arkusz).  
-Separator CSV wykrywany automatycznie (`,` lub `;`).
+Input format: CSV or XLSX (Excel sheet can be specified).
+CSV delimiter is detected automatically (, or ;).
 
 ---
 
-## Uruchomienie
+## How to Run
 
-# 1) (opcjonalnie) środowisko wirtualne
+# 1) (optional) Virtual envoirnment
 ```bash
 python -m venv .venv
 # Windows
@@ -89,34 +96,30 @@ python -m venv .venv
 # macOSLinux
 source .venvbinactivate
 ```
-# 2) zależności
+# 2) Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
-# 3) start aplikacji
+# 3) start the app
 ```bash
 streamlit run app.py
 ```
-Po starcie wczytaj swój plik w panelu bocznym („Upload Excel or CSV with raw data”).
 
-## Ustawienia metodyczne (w kodzie)
+After launch, upload your file in the sidebar panel (“Upload Excel or CSV with raw data”).
 
-Stymulantydestymulanty (np. ResponseTimeDays, Complaint Rate, Refund Rate są odwracane w z-score).
+## Methodological Settings (in code)
+- Stimulants vs destimulants &rarr; e.g., ResponseTimeDays, ComplaintRate, and RefundRate are reversed in z-score.
+- Benchmark vs anti-benchmark &rarr; extreme standardized values.
+- Recommendation thresholds &rarr; default: ≥ +1.0 = strong; ≤ −1.0 = weak.
 
-Wzorzecantywzorzec – skrajne wartości po standaryzacji.
+## Why it Works
 
-Progi do rekomendacji (domyślnie ≥ +1,0 mocna strona; ≤ −1,0 słaba).
-
-## Dlaczego to działa
-
-Normalizacja z-score usuwa różnice skali KPI.
-
-HellwigTOPSIS analizują wiele kryteriów naraz, więc ranking jest stabilniejszy niż „pojedyncza metryka”.
-
-Heatmapy i radar ułatwiają przełożenie liczb na decyzje (szkolenia, cele, coaching, routing wizyt).
+- z-score normalization eliminates differences in KPI scale.
+- Hellwig + TOPSIS evaluate many criteria simultaneously, producing more stable rankings than “single-metric” comparisons.
+- Heatmaps and radar charts translate numbers into actionable insights (training, goals, coaching, visit routing).
 
 ---
 
-### Autor
+## Author
 
-Projekt stworzony jako portfolio / CV project – Krzysztof Kubacki
+Project created as a portfolio / CV project – Krzysztof Kubacki
